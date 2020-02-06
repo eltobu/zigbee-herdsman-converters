@@ -113,19 +113,18 @@ const ictcg1 = (model, msg, publish, options, action) => {
         const direction = s.value === 0 ? 'left' : 'right';
         payload.action = `rotate_${direction}_quick`;
         payload.brightness = s.value;
+        payload.raw = s.raw;
     } else if (action === 'stop') {
         if (s.direction) {
             const duration = Date.now() - s.since;
             const delta = Math.round(rate * (duration / 10) * (s.direction === 'left' ? -1 : 1));
 			s.raw += delta;
             const newValue = s.value + delta;
-            if (newValue >= 0 && newValue <= 255) {
-                s.value = newValue;
-            }
+            s.value = Math.min(Math.max(newValue, 0), 255);
         }
         payload.action = 'rotate_stop';
         payload.brightness = s.value;
-		payload.raw = s.raw;
+        payload.raw = s.raw;
         s.direction = false;
     }
     if (s.timerId) {
@@ -138,11 +137,9 @@ const ictcg1 = (model, msg, publish, options, action) => {
             const delta = Math.round(rate * (duration / 10) * (s.direction === 'left' ? -1 : 1));
 			s.raw += delta;
             const newValue = s.value + delta;
-            if (newValue >= 0 && newValue <= 255) {
-                s.value = newValue;
-            }
+            s.value = Math.min(Math.max(newValue, 0), 255);
             payload.brightness = s.value;
-			payload.raw = s.raw;
+            payload.raw = s.raw;
             s.since = Date.now();
             s.publish(payload);
         }, 200);
