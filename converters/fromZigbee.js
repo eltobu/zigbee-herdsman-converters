@@ -96,7 +96,7 @@ const ictcg1 = (model, msg, publish, options, action) => {
     const payload = {};
 
     if (!store[deviceID]) {
-        store[deviceID] = {since: false, direction: false, value: 255, publish: publish};
+        store[deviceID] = {since: false, direction: false, value: 255, raw: 0, publish: publish};
     }
 
     const s = store[deviceID];
@@ -117,6 +117,7 @@ const ictcg1 = (model, msg, publish, options, action) => {
         if (s.direction) {
             const duration = Date.now() - s.since;
             const delta = Math.round(rate * (duration / 10) * (s.direction === 'left' ? -1 : 1));
+			s.raw += delta;
             const newValue = s.value + delta;
             if (newValue >= 0 && newValue <= 255) {
                 s.value = newValue;
@@ -124,6 +125,7 @@ const ictcg1 = (model, msg, publish, options, action) => {
         }
         payload.action = 'rotate_stop';
         payload.brightness = s.value;
+		payload.raw = s.raw;
         s.direction = false;
     }
     if (s.timerId) {
@@ -134,11 +136,13 @@ const ictcg1 = (model, msg, publish, options, action) => {
         s.timerId = setInterval(() => {
             const duration = Date.now() - s.since;
             const delta = Math.round(rate * (duration / 10) * (s.direction === 'left' ? -1 : 1));
+			s.raw += delta;
             const newValue = s.value + delta;
             if (newValue >= 0 && newValue <= 255) {
                 s.value = newValue;
             }
             payload.brightness = s.value;
+			payload.raw = s.raw;
             s.since = Date.now();
             s.publish(payload);
         }, 200);
