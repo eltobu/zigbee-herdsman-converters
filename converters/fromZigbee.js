@@ -144,7 +144,7 @@ const ictcg1 = (model, msg, publish, options, action) => {
             s.publish(payload);
         }, 200);
     }
-    return payload.brightness;
+    return [payload.brightness, payload.raw];
 };
 
 const ratelimitedDimmer = (model, msg, publish, options, meta) => {
@@ -1944,7 +1944,7 @@ const converters = {
         type: 'commandStop',
         convert: (model, msg, publish, options, meta) => {
             const value = ictcg1(model, msg, publish, options, 'stop');
-            return {action: `rotate_stop`, brightness: value};
+            return {action: `rotate_stop`, brightness: value[0], raw: value[1]};
         },
     },
     cmd_stop_with_onoff: {
@@ -1952,7 +1952,7 @@ const converters = {
         type: 'commandStopWithOnOff',
         convert: (model, msg, publish, options, meta) => {
             const value = ictcg1(model, msg, publish, options, 'stop');
-            return {action: `rotate_stop`, brightness: value};
+            return {action: `rotate_stop`, brightness: value[0], raw: value[1]};
         },
     },
     cmd_move_to_level_with_onoff: {
@@ -1961,7 +1961,7 @@ const converters = {
         convert: (model, msg, publish, options, meta) => {
             const value = ictcg1(model, msg, publish, options, 'level');
             const direction = msg.data.level === 0 ? 'left' : 'right';
-            return {action: `rotate_${direction}_quick`, level: msg.data.level, brightness: value};
+            return {action: `rotate_${direction}_quick`, level: msg.data.level, brightness: value[0], raw: value[1]};
         },
     },
     iris_3320L_contact: {
