@@ -2512,45 +2512,30 @@ const converters = {
         cluster: 'genLevelCtrl',
         type: 'commandStop',
         convert: (model, msg, publish, options, meta) => {
-<<<<<<< HEAD
-            const value = ictcg1(model, msg, publish, options, 'stop');
-            return {action: `rotate_stop`, brightness: value[0], raw: value[1]};
-=======
             if (options.hasOwnProperty('legacy') && options.legacy === false) {
                 return converters.command_stop.convert(model, msg, publish, options, meta);
             } else {
                 const value = ictcg1(model, msg, publish, options, 'stop');
                 return {action: `rotate_stop`, brightness: value};
             }
->>>>>>> upstream/master
         },
     },
     cmd_stop_with_onoff: {
         cluster: 'genLevelCtrl',
         type: 'commandStopWithOnOff',
         convert: (model, msg, publish, options, meta) => {
-<<<<<<< HEAD
-            const value = ictcg1(model, msg, publish, options, 'stop');
-            return {action: `rotate_stop`, brightness: value[0], raw: value[1]};
-=======
             if (options.hasOwnProperty('legacy') && options.legacy === false) {
                 return converters.command_stop.convert(model, msg, publish, options, meta);
             } else {
                 const value = ictcg1(model, msg, publish, options, 'stop');
                 return {action: `rotate_stop`, brightness: value};
             }
->>>>>>> upstream/master
         },
     },
     cmd_move_to_level_with_onoff: {
         cluster: 'genLevelCtrl',
         type: 'commandMoveToLevelWithOnOff',
         convert: (model, msg, publish, options, meta) => {
-<<<<<<< HEAD
-            const value = ictcg1(model, msg, publish, options, 'level');
-            const direction = msg.data.level === 0 ? 'left' : 'right';
-            return {action: `rotate_${direction}_quick`, level: msg.data.level, brightness: value[0], raw: value[1]};
-=======
             if (options.hasOwnProperty('legacy') && options.legacy === false) {
                 return converters.command_move_to_level.convert(model, msg, publish, options, meta);
             } else {
@@ -2558,7 +2543,6 @@ const converters = {
                 const direction = msg.data.level === 0 ? 'left' : 'right';
                 return {action: `rotate_${direction}_quick`, level: msg.data.level, brightness: value};
             }
->>>>>>> upstream/master
         },
     },
     iris_3320L_contact: {
